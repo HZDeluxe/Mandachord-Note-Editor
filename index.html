@@ -31,47 +31,25 @@
             <td><span style="margin-left:10px">请注意游戏中打击乐每节最多26音符，低音每节最多16音符，旋律每节最多16音符</span></td>
         </tr>
     </table>
-    <table style="width: 1200px; height: 20px;">
-        <thead>
-            <tr>
-                <td style="width: 75px;"></td>
-                <td style="width: 75px;"></td>
-                <td style="width: 75px;"></td>
-                <td style="width: 75px;"></td>
-                <td style="width: 75px;"></td>
-                <td style="width: 75px;"></td>
-                <td style="width: 75px;"></td>
-                <td style="width: 75px;"></td>
-                <td style="width: 75px;"></td>
-                <td style="width: 75px;"></td>
-                <td style="width: 75px;"></td>
-                <td style="width: 75px;"></td>
-                <td style="width: 75px;"></td>
-                <td style="width: 75px;"></td>
-                <td style="width: 75px;"></td>
-                <td style="width: 75px;"></td>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>1</td>
-                <td>▼</td>
-                <td>▼</td>
-                <td>▼</td>
-                <td>2</td>
-                <td>▼</td>
-                <td>▼</td>
-                <td>▼</td>
-                <td>3</td>
-                <td>▼</td>
-                <td>▼</td>
-                <td>▼</td>
-                <td>4</td>
-                <td>▼</td>
-                <td>▼</td>
-                <td>▼</td>
-            </tr>
-        </tbody>
+    <table style="width: 1200px; height: 20px; table-layout: fixed;">
+        <tr>
+            <td>1</td>
+            <td>▼</td>
+            <td>▼</td>
+            <td>▼</td>
+            <td>2</td>
+            <td>▼</td>
+            <td>▼</td>
+            <td>▼</td>
+            <td>3</td>
+            <td>▼</td>
+            <td>▼</td>
+            <td>▼</td>
+            <td>4</td>
+            <td>▼</td>
+            <td>▼</td>
+            <td>▼</td>
+        </tr>
     </table>
     <div style="margin-left:10px">
         <div id="percussionNote"></div>
@@ -82,14 +60,28 @@
 
         <div id="melodyNote"></div>
         <div style="margin-bottom: 5px"></div>
-
-        <table>
-            <tr>
-                <td><div id="play"></div></td>
-                <td></td>
-            </tr>
-        </table>
     </div>
+    <table style="width: 1200px; height: 20px; table-layout: fixed;">
+        <tr>
+            <td>1</td>
+            <td>▲</td>
+            <td>▲</td>
+            <td>▲</td>
+            <td>2</td>
+            <td>▲</td>
+            <td>▲</td>
+            <td>▲</td>
+            <td>3</td>
+            <td>▲</td>
+            <td>▲</td>
+            <td>▲</td>
+            <td>4</td>
+            <td>▲</td>
+            <td>▲</td>
+            <td>▲</td>
+        </tr>
+    </table>
+    <div id="play"></div>
     <script>
         function unescape(str) {
             return (str + '==='.slice((str.length + 3) % 4))
