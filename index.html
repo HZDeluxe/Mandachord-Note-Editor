@@ -1,34 +1,34 @@
 ﻿<!doctype html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>曼达和弦琴谱面编辑器 | Mandachord Note Editor</title>
+    <title>Mandachord Note Editor | 曼达和弦琴谱面编辑器</title>
     <script src="js/NexusUI.js"></script>
     <script src="js/Tone.js"></script>
     <script src="js/base64js.min.js"></script>
 </head>
 
 <body>
-    <h4>曼达和弦琴谱面编辑器 | Mandachord Note Editor<a href="https://en.mandachord.tk" style="margin-left:10px">English Ver.</a></h4>
+    <h4>Mandachord Note Editor | 曼达和弦琴谱面编辑器<a href="https://mandachord.tk" style="margin-left:10px">中文版</a></h4>
     <table id="instOptions">
         <tr>
-            <td>打击乐：</td>
+            <td>Percussion：</td>
             <td><div nexus-ui="select" id="percussionInst"></div></td>
             <td><div nexus-ui="slider" id="percussionVol"></div></td>
-            <td><a id="shareUrl" href="#" target="_blank" style="margin-left:10px">分享链接</a>←完成之后复制这个链接！刷新页面会丢失所有的修改！| 页面没有自适应，请自行Ctrl+滚轮放大！</td>
+            <td><a id="shareUrl" href="#" target="_blank" style="margin-left:10px">Save/Share</a>←Copy this link after you finish! Refreshing the page will lose all your modifications! | The page is not adaptive, please zoom in by Ctrl + Wheel!</td>
         </tr>
         <tr>
-            <td>低音：</td>
+            <td>Bass：</td>
             <td><div nexus-ui="select" id="bassInst"></div></td>
             <td><div nexus-ui="slider" id="bassVol"></div></td>
-            <td><span style="margin-left:10px">注意！链接包含了整个谱面信息，在每次音符修改后都会改变。请在每完成一个作品后自行保存链接文本。</span></td>
+            <td><span style="margin-left:10px">The link contains the entire notes information, which changes every time the note is modified. Please save the link text yourself after each work is completed.</span></td>
         </tr>
         <tr>
-            <td>旋律：</td>
+            <td>Melody：</td>
             <td><div nexus-ui="select" id="melodyInst"></div></td>
             <td><div nexus-ui="slider" id="melodyVol"></div></td>
-            <td><span style="margin-left:10px">请注意游戏中打击乐每节最多26音符，低音每节最多16音符，旋律每节最多16音符。</span></td>
+            <td><span style="margin-left:10px">Please note that there are notes limits of every bar in game. Percussion:26 notes max per bar, Bass:16 notes max per bar, Melody: 16 notes max per bar.</span></td>
         </tr>
     </table>
     <table style="width: 1200px; height: 20px; table-layout: fixed;">
@@ -379,8 +379,8 @@
         var play = new Nexus.TextButton('#play', {
             'size': [150, 50],
             'state': false,
-            'text': '播放',
-            'alternateText': '暂停'
+            'text': 'Play',
+            'alternateText': 'Pause'
         });
 
         play.on('change', function (v) {
