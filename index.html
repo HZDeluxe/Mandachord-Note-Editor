@@ -81,7 +81,14 @@
             <td>▲</td>
         </tr>
     </table>
-    <div id="play"></div>
+    <table>
+        <tr>
+            <td><div id="play"></div></td>
+            <td><div id="houseBeat"></div></td>
+            <td><div id="flipCoins"></div></td>
+        </tr>
+    </table>
+
     <script>
         function unescape(str) {
             return (str + '==='.slice((str.length + 3) % 4))
@@ -392,6 +399,34 @@
                 percussion.stop();
                 bass.stop();
                 melody.stop();
+            }
+        });
+
+        var houseBeat = new Nexus.TextButton('#houseBeat', {
+            'size': [150, 50],
+            'text': 'House Beat!'
+        });
+        houseBeat.on('change', function (v) {
+            if (v && confirm("This action will override percussion notes, Are you sure？")) {
+                var pMatrix = percussion.matrix;
+                pMatrix.populate.row(0, [1, 0, 0, 0]);
+                pMatrix.populate.row(1, [0, 0, 0, 0, 1, 0, 0, 0]);
+                pMatrix.populate.row(2, [1, 0]);
+            }
+        });
+
+        var flipCoins = new Nexus.TextButton('#flipCoins', {
+            'size': [150, 50],
+            'text': 'Flip Coins!'
+        });
+        flipCoins.on('change', function (v) {
+            if (v && confirm("This action will override ALL notes, Are you sure？")) {
+                var pMatrix = percussion.matrix;
+                pMatrix.populate.all([0.2]);
+                var bMatrix = bass.matrix;
+                bMatrix.populate.all([0.2]);
+                var mMatrix = melody.matrix;
+                mMatrix.populate.all([0.2]);
             }
         });
 
