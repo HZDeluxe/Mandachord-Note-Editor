@@ -258,17 +258,17 @@
 
         var instOptions = new Nexus.Rack("#instOptions");
 
-        instOptions.percussionInst.defineOptions(["ADAU", "ALPHA", "BETA", "GAMMA"]);
+        instOptions.percussionInst.defineOptions(["ADAU", "ALPHA", "BETA", "GAMMA", "DELTA"]);
         instOptions.percussionInst.on('change', function (v) {
             reloadInst(0, v);
             createUrl();
         })
-        instOptions.bassInst.defineOptions(["ADAU", "ALPHA", "BETA", "GAMMA"]);
+        instOptions.bassInst.defineOptions(["ADAU", "ALPHA", "BETA", "GAMMA", "DELTA"]);
         instOptions.bassInst.on('change', function (v) {
             reloadInst(1, v);
             createUrl();
         })
-        instOptions.melodyInst.defineOptions(["ADAU", "ALPHA", "BETA", "GAMMA"]);
+        instOptions.melodyInst.defineOptions(["ADAU", "ALPHA", "BETA", "GAMMA", "DELTA"]);
         instOptions.melodyInst.on('change', function (v) {
             reloadInst(2, v);
             createUrl();
