@@ -100,17 +100,17 @@
             switch (type) {
                 case 0:
                     for (i in pNames) {
-                        notes.get(pNames[i]).load("./sound/" + inst.value.toLowerCase() + "-" + pNames[i] + ".ogg");
+                        notes.get(pNames[i]).load("./sound/" + inst.value.toLowerCase() + "-" + pNames[i] + ".mp3");
                     }
                     break;
                 case 1:
                     for (i in bNames) {
-                        notes.get(bNames[i]).load("./sound/" + inst.value.toLowerCase() + "-" + bNames[i] + ".ogg");
+                        notes.get(bNames[i]).load("./sound/" + inst.value.toLowerCase() + "-" + bNames[i] + ".mp3");
                     }
                     break;
                 case 2:
                     for (i in mNames) {
-                        notes.get(mNames[i]).load("./sound/" + inst.value.toLowerCase() + "-" + mNames[i] + ".ogg");
+                        notes.get(mNames[i]).load("./sound/" + inst.value.toLowerCase() + "-" + mNames[i] + ".mp3");
                     }
                     break;
             }
@@ -218,19 +218,19 @@
         var isLoaded = false;
 
         var notes = new Tone.Players({
-            "p1": "./sound/adau-p1.ogg",
-            "p2": "./sound/adau-p2.ogg",
-            "p3": "./sound/adau-p3.ogg",
-            "b1": "./sound/adau-b1.ogg",
-            "b2": "./sound/adau-b2.ogg",
-            "b3": "./sound/adau-b3.ogg",
-            "b4": "./sound/adau-b4.ogg",
-            "b5": "./sound/adau-b5.ogg",
-            "m1": "./sound/adau-m1.ogg",
-            "m2": "./sound/adau-m2.ogg",
-            "m3": "./sound/adau-m3.ogg",
-            "m4": "./sound/adau-m4.ogg",
-            "m5": "./sound/adau-m5.ogg",
+            "p1": "./sound/adau-p1.mp3",
+            "p2": "./sound/adau-p2.mp3",
+            "p3": "./sound/adau-p3.mp3",
+            "b1": "./sound/adau-b1.mp3",
+            "b2": "./sound/adau-b2.mp3",
+            "b3": "./sound/adau-b3.mp3",
+            "b4": "./sound/adau-b4.mp3",
+            "b5": "./sound/adau-b5.mp3",
+            "m1": "./sound/adau-m1.mp3",
+            "m2": "./sound/adau-m2.mp3",
+            "m3": "./sound/adau-m3.mp3",
+            "m4": "./sound/adau-m4.mp3",
+            "m5": "./sound/adau-m5.mp3",
         }, {
                 "fadeOut": "64n",
             })
@@ -258,17 +258,17 @@
 
         var instOptions = new Nexus.Rack("#instOptions");
 
-        instOptions.percussionInst.defineOptions(["ADAU", "ALPHA"]);
+        instOptions.percussionInst.defineOptions(["ADAU", "ALPHA", "BETA"]);
         instOptions.percussionInst.on('change', function (v) {
             reloadInst(0, v);
             createUrl();
         })
-        instOptions.bassInst.defineOptions(["ADAU", "ALPHA"]);
+        instOptions.bassInst.defineOptions(["ADAU", "ALPHA", "BETA"]);
         instOptions.bassInst.on('change', function (v) {
             reloadInst(1, v);
             createUrl();
         })
-        instOptions.melodyInst.defineOptions(["ADAU", "ALPHA"]);
+        instOptions.melodyInst.defineOptions(["ADAU", "ALPHA", "BETA"]);
         instOptions.melodyInst.on('change', function (v) {
             reloadInst(2, v);
             createUrl();
