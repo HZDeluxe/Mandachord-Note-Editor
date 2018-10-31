@@ -407,7 +407,7 @@
             'text': 'House Beat!'
         });
         houseBeat.on('change', function (v) {
-            if (v && confirm("This action will override percussion notes, Are you sure？")) {
+            if (v && confirm("This action will override percussion notes, Are you sure？(Remember to change instrument!)")) {
                 var pMatrix = percussion.matrix;
                 pMatrix.populate.row(0, [1, 0, 0, 0]);
                 pMatrix.populate.row(1, [0, 0, 0, 0, 1, 0, 0, 0]);
@@ -420,7 +420,7 @@
             'text': 'Flip Coins!'
         });
         flipCoins.on('change', function (v) {
-            if (v && confirm("This action will override ALL notes, Are you sure？")) {
+            if (v && confirm("This action will override ALL notes, Are you sure？(Try different combination of instruments!)")) {
                 var pMatrix = percussion.matrix;
                 pMatrix.populate.all([0.2]);
                 var bMatrix = bass.matrix;
