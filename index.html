@@ -3,153 +3,156 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link href="https://cdn.bootcss.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdn.bootcss.com/jquery.fancytree/2.28.1/skin-win8/ui.fancytree.min.css" rel="stylesheet">
     <title>曼达和弦琴谱面编辑器 | Mandachord Note Editor</title>
+    <script src="js/NexusUI.js"></script>
+    <script src="js/Tone.js"></script>
 </head>
+
 <body>
-    <div class="container text-center pt-3 mx-auto" style="width:700px;min-height:600px;">
-        <h2 class="mb-3">曼达和弦琴谱面编辑器</h2>
-        <p class="lead">
-            在OneDrive文件（夹）上右键可获取分享链接
-        </p>
-        <a href="#" id="SampleLink">点击填入示例链接</a>
-        <a href="#" data-toggle="modal" data-target="#SampleModal" class="ml-3">点击查看外链示例</a>
-        <div class="input-group mx-auto mb-3">
-            <input id="LinkField" type="text" class="form-control" placeholder="请输入OneDrive文件（夹）的分享链接">
-            <div class="input-group-append">
-                <button id="GenerateButton" class="btn btn-outline-primary" type="button">生成直链</button>
-            </div>
-        </div>
-        <div class="row mx-auto mb-3">
-            <span class="col-2" style="padding-left:0;padding-right:0;">缩略图选项：</span>
-            <div class="col input-group input-group-sm" data-toggle="tooltip" title="更改缩略图选项之后需要重新生成直链">
-                <div class="input-group-prepend">
-                    <div class="input-group-text">
-                        <input type="radio" name="picOptions" value="small">
-                        <span>小</span>
-                    </div>
-                    <div class="input-group-text">
-                        <input type="radio" name="picOptions" value="medium">
-                        <span>中</span>
-                    </div>
-                    <div class="input-group-text">
-                        <input type="radio" name="picOptions" value="large" checked>
-                        <span>大</span>
-                    </div>
-                    <div class="input-group-text">
-                        <input type="radio" name="picOptions" value="custom">
-                        <span>自定</span>
-                    </div>
-                </div>
-                <input type="text" class="form-control" placeholder="宽" id="WidthField">
-                <input type="text" class="form-control" placeholder="高" id="HeightField">
-                <div class="input-group-append">
-                    <div class="input-group-text">
-                        <input type="checkbox" id="CropCheckbox">
-                        <span>裁切</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="table-responsive">
-            <table id="tree" class="table table-sm">
-                <colgroup>
-                    <col width="*"></col>
-                    <col width="100px"></col>
-                    <col width="120px"></col>
-                </colgroup>
-                <thead class="thead-light">
-                    <tr> <th class="text-left">文件列表</th> <th></th> <th></th> </tr>
-                </thead>
-                <tbody></tbody>
-            </table>
-        </div>
+    <table style="width: 1200px; height: 20px; table-layout: fixed;">
+        <tr>
+            <td>1</td>
+            <td>▼</td>
+            <td>▼</td>
+            <td>▼</td>
+            <td>2</td>
+            <td>▼</td>
+            <td>▼</td>
+            <td>▼</td>
+            <td>3</td>
+            <td>▼</td>
+            <td>▼</td>
+            <td>▼</td>
+            <td>4</td>
+            <td>▼</td>
+            <td>▼</td>
+            <td>▼</td>
+        </tr>
+    </table>
+    <div style="margin-left:10px">
+        <div id="percussion"></div>
+        <div style="margin-bottom: 5px"></div>
+
+        <div id="bass"></div>
+        <div style="margin-bottom: 5px"></div>
+
+        <div id="melody"></div>
+        <div style="margin-bottom: 5px"></div>
+
+        <div id="play"></div>
     </div>
-    <footer class="footer" style="height: 80px; background-color: #f5f5f5;">
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col my-auto">
-                    <a href="https://getfirefox.com/"><img height="60" src="img/firefox.svg" alt="Get Firefox Today!" /></a>
-                    <span>建议使用<a href="https://getfirefox.com/">Firefox®</a>浏览此页</span>
-                </div>
-                <div class="col text-right my-auto">
-                    <a href="https://pages.coding.me"><img src="img/coding.svg" alt="Hosted by Coding Pages" /></a>
-                </div>
-            </div>
-
-        </div>
-    </footer>
-
-    <!-- Modal -->
-    <div class="modal fade" id="SampleModal" tabindex="-1" role="dialog">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">外链示例</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <div class="container-fluid">
-                        <div class="row">
-                            <div class="col">
-                                <h4>图片(Unsplash License)：</h4>
-                                <img id="LazyImg" data-src="https://api.onedrive.com/v1.0/shares/u!aHR0cHM6Ly8xZHJ2Lm1zL2kvcyFBbW9Ec2ctQlpZVmFpXzRaUkZLRFI4Q1dLdF9CekE/driveItem/thumbnails/0/c300x500/content" />
-                            </div>
-                            <div class="col">
-                                <h4>视频(CC0 License)：</h4>
-                                <video preload="none" width="400" height="250" class="mb-3" controls>
-                                    <source src="https://api.onedrive.com/v1.0/shares/u!aHR0cHM6Ly8xZHJ2Lm1zL2kvcyFBbW9Ec2ctQlpZVmFpXzRZUkZLRFI4Q1dLdF9CekE/driveItem/content" type="video/mp4" />
-                                </video>
-                                <h4>音乐(CC0 License)：</h4>
-                                <audio preload="none" style="width:100%" controls>
-                                    <source src="https://api.onedrive.com/v1.0/shares/u!aHR0cHM6Ly8xZHJ2Lm1zL3UvcyFBbW9Ec2ctQlpZVmFpXzRhUkZLRFI4Q1dLdF9CekE/driveItem/content" type="audio/mpeg" />
-                                </audio>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
-    <script src="https://cdn.bootcss.com/popper.js/1.14.3/umd/popper.min.js"></script>
-    <script src="https://cdn.bootcss.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
-    <script src="https://cdn.bootcss.com/jquery.fancytree/2.28.1/jquery.fancytree-all-deps.min.js"></script>
-    <script src="js/text-encoder-lite.min.js"></script>
-    <script src="js/base64js.min.js"></script>
-    <script src="js/1drvDLC.js"></script>
-
     <script>
-        $(document).ready(function () {
-            var paramStr = location.search.substring(1);
-            if (paramStr) {
-                var parameters = paramStr.split("&");
-                var temp = parameters[0].split("=");
-                var partialUrl = unescape(temp[1]);
-                var url = "https://1drv.ms/f/s!" + partialUrl;
-                $("#LinkField").val(url);
-                TreeLoad(UrlEncode(url));
-            }
+        var notes = new Tone.Players({
+            "p1": "./sound/adau-p1.ogg",
+            "p2": "./sound/adau-p2.ogg",
+            "p3": "./sound/adau-p3.ogg",
+            "b1": "./sound/adau-b1.ogg",
+            "b2": "./sound/adau-b2.ogg",
+            "b3": "./sound/adau-b3.ogg",
+            "b4": "./sound/adau-b4.ogg",
+            "b5": "./sound/adau-b5.ogg",
+            "m1": "./sound/adau-m1.ogg",
+            "m2": "./sound/adau-m2.ogg",
+            "m3": "./sound/adau-m3.ogg",
+            "m4": "./sound/adau-m4.ogg",
+            "m5": "./sound/adau-m5.ogg",
+        }, {
+            "volume": -10,
+            "fadeOut": "64n",
+        }).toMaster();
 
-            $('[data-toggle="tooltip"]').tooltip();
+        var pNames = ["p1", "p2", "p3"];
+        var bNames = ["b1", "b2", "b3", "b4", "b5"];
+        var mNames = ["m1", "m2", "m3", "m4", "m5"];
 
-            $("#SampleLink").click(function () {
-                $("#LinkField").val("https://1drv.ms/f/s!AmoDsg-BZYVai_4BRFKDR8CWKt_BzA");
-            });
 
-            $("#GenerateButton").click(function () {
-                var url = $("#LinkField").val();
-                TreeLoad(UrlEncode(url));
-            });
-
-            $('#SampleModal').on("show.bs.modal", function () {
-                $("#LazyImg").attr("src", $("#LazyImg").data("src"));
-            });
+        var percussion = new Nexus.Sequencer('#percussion', {
+            'size': [1200, 60],
+            'mode': 'toggle',
+            'rows': 3,
+            'columns': 64
         });
+        percussion.interval.ms(125);
+        percussion.colorize("accent", "#757575");
+        percussion.colorize("fill", "#e6e6e6");
+        percussion.on('change', function (v) {
+            if (v.state) {
+                notes.get(pNames[v.row]).start();
+            }
+        });
+        percussion.on('step', function (v) {
+            for (i in v) {
+                if (v[i]) {
+                    notes.get(pNames[2 - i]).start();
+                }
+            }
+        });
+
+        var bass = new Nexus.Sequencer('#bass', {
+            'size': [1200, 100],
+            'mode': 'toggle',
+            'rows': 5,
+            'columns': 64
+        });
+        bass.interval.ms(125);
+        bass.colorize("accent", "#66b3cf");
+        bass.colorize("fill", "#ecf5f9");
+        bass.on('change', function (v) {
+            if (v.state) {
+                notes.get(bNames[v.row]).start();
+            }
+        });
+        bass.on('step', function (v) {
+            for (i in v) {
+                if (v[i]) {
+                    notes.get(bNames[4 - i]).start();
+                }
+            }
+        });
+
+        var melody = new Nexus.Sequencer('#melody', {
+            'size': [1200, 100],
+            'mode': 'toggle',
+            'rows': 5,
+            'columns': 64
+        });
+        melody.interval.ms(125);
+        melody.colorize("accent", "#f88bff");
+        melody.colorize("fill", "#fde6ff");
+        melody.on('change', function (v) {
+            if (v.state) {
+                notes.get(mNames[v.row]).start();
+            }
+        });
+        melody.on('step', function (v) {
+            for (i in v) {
+                if (v[i]) {
+                    notes.get(mNames[4 - i]).start();
+                }
+            }
+        });
+
+        var play = new Nexus.TextButton('#play', {
+            'size': [150, 50],
+            'state': false,
+            'text': 'Play',
+            'alternateText': 'Stop'
+        });
+
+        play.on('change', function (v) {
+            if (v) {
+                percussion.start();
+                bass.start();
+                melody.start();
+            } else{
+                percussion.stop();
+                bass.stop();
+                melody.stop();
+            }
+            
+            console.log(v);
+        })
     </script>
 </body>
+
 </html>
