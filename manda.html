@@ -1,0 +1,158 @@
+﻿<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>曼达和弦琴谱面编辑器 | Mandachord Note Editor</title>
+    <script src="js/NexusUI.js"></script>
+    <script src="js/Tone.js"></script>
+</head>
+
+<body>
+    <table style="width: 1200px; height: 20px; table-layout: fixed;">
+        <tr>
+            <td>1</td>
+            <td>▼</td>
+            <td>▼</td>
+            <td>▼</td>
+            <td>2</td>
+            <td>▼</td>
+            <td>▼</td>
+            <td>▼</td>
+            <td>3</td>
+            <td>▼</td>
+            <td>▼</td>
+            <td>▼</td>
+            <td>4</td>
+            <td>▼</td>
+            <td>▼</td>
+            <td>▼</td>
+        </tr>
+    </table>
+    <div style="margin-left:10px">
+        <div id="percussion"></div>
+        <div style="margin-bottom: 5px"></div>
+
+        <div id="bass"></div>
+        <div style="margin-bottom: 5px"></div>
+
+        <div id="melody"></div>
+        <div style="margin-bottom: 5px"></div>
+
+        <div id="play"></div>
+    </div>
+    <script>
+        var notes = new Tone.Players({
+            "p1": "./sound/adau-p1.ogg",
+            "p2": "./sound/adau-p2.ogg",
+            "p3": "./sound/adau-p3.ogg",
+            "b1": "./sound/adau-b1.ogg",
+            "b2": "./sound/adau-b2.ogg",
+            "b3": "./sound/adau-b3.ogg",
+            "b4": "./sound/adau-b4.ogg",
+            "b5": "./sound/adau-b5.ogg",
+            "m1": "./sound/adau-m1.ogg",
+            "m2": "./sound/adau-m2.ogg",
+            "m3": "./sound/adau-m3.ogg",
+            "m4": "./sound/adau-m4.ogg",
+            "m5": "./sound/adau-m5.ogg",
+        }, {
+            "volume": -10,
+            "fadeOut": "64n",
+        }).toMaster();
+
+        var pNames = ["p1", "p2", "p3"];
+        var bNames = ["b1", "b2", "b3", "b4", "b5"];
+        var mNames = ["m1", "m2", "m3", "m4", "m5"];
+
+
+        var percussion = new Nexus.Sequencer('#percussion', {
+            'size': [1200, 60],
+            'mode': 'toggle',
+            'rows': 3,
+            'columns': 64
+        });
+        percussion.interval.ms(125);
+        percussion.colorize("accent", "#757575");
+        percussion.colorize("fill", "#e6e6e6");
+        percussion.on('change', function (v) {
+            if (v.state) {
+                notes.get(pNames[v.row]).start();
+            }
+        });
+        percussion.on('step', function (v) {
+            for (i in v) {
+                if (v[i]) {
+                    notes.get(pNames[2 - i]).start();
+                }
+            }
+        });
+
+        var bass = new Nexus.Sequencer('#bass', {
+            'size': [1200, 100],
+            'mode': 'toggle',
+            'rows': 5,
+            'columns': 64
+        });
+        bass.interval.ms(125);
+        bass.colorize("accent", "#66b3cf");
+        bass.colorize("fill", "#ecf5f9");
+        bass.on('change', function (v) {
+            if (v.state) {
+                notes.get(bNames[v.row]).start();
+            }
+        });
+        bass.on('step', function (v) {
+            for (i in v) {
+                if (v[i]) {
+                    notes.get(bNames[4 - i]).start();
+                }
+            }
+        });
+
+        var melody = new Nexus.Sequencer('#melody', {
+            'size': [1200, 100],
+            'mode': 'toggle',
+            'rows': 5,
+            'columns': 64
+        });
+        melody.interval.ms(125);
+        melody.colorize("accent", "#f88bff");
+        melody.colorize("fill", "#fde6ff");
+        melody.on('change', function (v) {
+            if (v.state) {
+                notes.get(mNames[v.row]).start();
+            }
+        });
+        melody.on('step', function (v) {
+            for (i in v) {
+                if (v[i]) {
+                    notes.get(mNames[4 - i]).start();
+                }
+            }
+        });
+
+        var play = new Nexus.TextButton('#play', {
+            'size': [150, 50],
+            'state': false,
+            'text': 'Play',
+            'alternateText': 'Stop'
+        });
+
+        play.on('change', function (v) {
+            if (v) {
+                percussion.start();
+                bass.start();
+                melody.start();
+            } else{
+                percussion.stop();
+                bass.stop();
+                melody.stop();
+            }
+            
+            console.log(v);
+        })
+    </script>
+</body>
+
+</html>
