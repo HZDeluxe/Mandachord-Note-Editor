@@ -16,7 +16,7 @@
             <td>打击乐：</td>
             <td><div nexus-ui="select" id="percussionInst"></div></td>
             <td><div nexus-ui="slider" id="percussionVol"></div></td>
-            <td><a id="shareUrl" href="#" target="_blank" style="margin-left:10px">分享链接</a>←完成之后复制这个链接！刷新页面会丢失所有的修改！</td>
+            <td><a id="shareUrl" href="#" target="_blank" style="margin-left:10px">分享链接</a>←完成之后复制这个链接！刷新页面会丢失所有的修改！| 页面没有自适应，请自行Ctrl+滚轮放大！</td>
         </tr>
         <tr>
             <td>低音：</td>
@@ -258,17 +258,17 @@
 
         var instOptions = new Nexus.Rack("#instOptions");
 
-        instOptions.percussionInst.defineOptions(["ADAU", "ALPHA", "BETA", "GAMMA", "DELTA"]);
+        instOptions.percussionInst.defineOptions(["ADAU", "ALPHA", "BETA", "DELTA", "DRUK", "GAMMA"]);
         instOptions.percussionInst.on('change', function (v) {
             reloadInst(0, v);
             createUrl();
         })
-        instOptions.bassInst.defineOptions(["ADAU", "ALPHA", "BETA", "GAMMA", "DELTA"]);
+        instOptions.bassInst.defineOptions(["ADAU", "ALPHA", "BETA", "DELTA", "DRUK", "GAMMA"]);
         instOptions.bassInst.on('change', function (v) {
             reloadInst(1, v);
             createUrl();
         })
-        instOptions.melodyInst.defineOptions(["ADAU", "ALPHA", "BETA", "GAMMA", "DELTA"]);
+        instOptions.melodyInst.defineOptions(["ADAU", "ALPHA", "BETA", "DELTA", "DRUK", "GAMMA"]);
         instOptions.melodyInst.on('change', function (v) {
             reloadInst(2, v);
             createUrl();
