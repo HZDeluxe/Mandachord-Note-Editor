@@ -6,42 +6,224 @@
     <title>曼达和弦琴谱面编辑器 | Mandachord Note Editor</title>
     <script src="js/NexusUI.js"></script>
     <script src="js/Tone.js"></script>
+    <script src="js/base64js.min.js"></script>
 </head>
 
 <body>
-    <table style="width: 1200px; height: 20px; table-layout: fixed;">
+    <table id="instOptions">
         <tr>
-            <td>1</td>
-            <td>▼</td>
-            <td>▼</td>
-            <td>▼</td>
-            <td>2</td>
-            <td>▼</td>
-            <td>▼</td>
-            <td>▼</td>
-            <td>3</td>
-            <td>▼</td>
-            <td>▼</td>
-            <td>▼</td>
-            <td>4</td>
-            <td>▼</td>
-            <td>▼</td>
-            <td>▼</td>
+            <td>打击乐：</td>
+            <td><div nexus-ui="select" id="percussionInst"></div></td>
+            <td><div nexus-ui="slider" id="percussionVol"></div></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>低音：</td>
+            <td><div nexus-ui="select" id="bassInst"></div></td>
+            <td><div nexus-ui="slider" id="bassVol"></div></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>旋律：</td>
+            <td><div nexus-ui="select" id="melodyInst"></div></td>
+            <td><div nexus-ui="slider" id="melodyVol"></div></td>
+            <td><span style="margin-left:10px">请注意游戏中打击乐每节最多26音符，低音每节最多16音符，旋律每节最多16音符</span></td>
         </tr>
     </table>
+    <table style="width: 1200px; height: 20px;">
+        <thead>
+            <tr>
+                <td style="width: 75px;"></td>
+                <td style="width: 75px;"></td>
+                <td style="width: 75px;"></td>
+                <td style="width: 75px;"></td>
+                <td style="width: 75px;"></td>
+                <td style="width: 75px;"></td>
+                <td style="width: 75px;"></td>
+                <td style="width: 75px;"></td>
+                <td style="width: 75px;"></td>
+                <td style="width: 75px;"></td>
+                <td style="width: 75px;"></td>
+                <td style="width: 75px;"></td>
+                <td style="width: 75px;"></td>
+                <td style="width: 75px;"></td>
+                <td style="width: 75px;"></td>
+                <td style="width: 75px;"></td>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>1</td>
+                <td>▼</td>
+                <td>▼</td>
+                <td>▼</td>
+                <td>2</td>
+                <td>▼</td>
+                <td>▼</td>
+                <td>▼</td>
+                <td>3</td>
+                <td>▼</td>
+                <td>▼</td>
+                <td>▼</td>
+                <td>4</td>
+                <td>▼</td>
+                <td>▼</td>
+                <td>▼</td>
+            </tr>
+        </tbody>
+    </table>
     <div style="margin-left:10px">
-        <div id="percussion"></div>
+        <div id="percussionNote"></div>
         <div style="margin-bottom: 5px"></div>
 
-        <div id="bass"></div>
+        <div id="bassNote"></div>
         <div style="margin-bottom: 5px"></div>
 
-        <div id="melody"></div>
+        <div id="melodyNote"></div>
         <div style="margin-bottom: 5px"></div>
 
-        <div id="play"></div>
+        <table>
+            <tr>
+                <td><div id="play"></div></td>
+                <td><a id="shareUrl" href="#">分享链接</a></td>
+            </tr>
+        </table>   
     </div>
     <script>
+        function unescape(str) {
+            return (str + '==='.slice((str.length + 3) % 4))
+                .replace(/-/g, '+')
+                .replace(/_/g, '/')
+        }
+
+        function escape(str) {
+            return str.replace(/\+/g, '-')
+                .replace(/\//g, '_')
+                .replace(/=/g, '')
+        }
+
+        function reloadInst(type, inst) {
+            //0:p,1:b,2:m
+            switch (type) {
+                case 0:
+                    for (i in pNames) {
+                        notes.get(pNames[i]).load("./sound/" + inst.value.toLowerCase() + "-" + pNames[i] +".ogg");
+                    }
+                    break;
+                case 1:
+                    for (i in bNames) {
+                        notes.get(bNames[i]).load("./sound/" + inst.value.toLowerCase() + "-" + bNames[i] + ".ogg");
+                    }
+                    break;
+                case 2:
+                    for (i in mNames) {
+                        notes.get(mNames[i]).load("./sound/" + inst.value.toLowerCase() + "-" + mNames[i] + ".ogg");
+                    }
+                    break;
+            }
+        }
+
+        function saveNotes() {
+            var arr = new Uint8Array(110);
+            arr[0] = instOptions.percussionInst.selectedIndex;
+            arr[1] = instOptions.bassInst.selectedIndex;
+            arr[2] = instOptions.melodyInst.selectedIndex;
+            arr[3] = instOptions.percussionVol.value;
+            arr[4] = instOptions.bassVol.value;
+            arr[5] = instOptions.melodyVol.value;
+
+            var index = 6;
+
+            pPattern = percussion.matrix.pattern;
+            for (i in pPattern) {
+                for (var j = 0; j < 64; j = j + 8) {
+                    var bitStr = "";
+                    for (var k = 0; k < 8; k++) {
+                        var bit = pPattern[i][j + k] ? 1 : 0;
+                        bitStr += bit.toString();
+                    }
+                    arr[index] = parseInt(bitStr, 2);
+                    index++;
+                }
+            }
+            bPattern = bass.matrix.pattern;
+            for (i in bPattern) {
+                for (var j = 0; j < 64; j = j + 8) {
+                    var bitStr = "";
+                    for (var k = 0; k < 8; k++) {
+                        var bit = bPattern[i][j + k] ? 1 : 0;
+                        bitStr += bit.toString();
+                    }
+                    arr[index] = parseInt(bitStr, 2);
+                    index++;
+                }
+            }
+            mPattern = melody.matrix.pattern;
+            for (i in mPattern) {
+                for (var j = 0; j < 64; j = j + 8) {
+                    var bitStr = "";
+                    for (var k = 0; k < 8; k++) {
+                        var bit = mPattern[i][j + k] ? 1 : 0;
+                        bitStr += bit.toString();
+                    }
+                    arr[index] = parseInt(bitStr, 2);
+                    index++;
+                }
+            }
+            return arr;
+        }
+
+        function loadNotes(arr) {
+            instOptions.percussionInst.selectedIndex = arr[0];
+            instOptions.bassInst.selectedIndex = arr[1];
+            instOptions.melodyInst.selectedIndex = arr[2];
+            instOptions.percussionVol.value = arr[3];
+            instOptions.bassVol.value = arr[4];
+            instOptions.melodyVol.value = arr[5];
+
+            var index = 5;
+
+            pMatrix = percussion.matrix;
+            for (var i = 0; i < 3; i++) {
+                for (var j = 0; j < 64; j = j + 8) {
+                    index++;
+                    var bitStr = ("00000000" + arr[index].toString(2)).substr(-8);
+                    for (var k = 0; k < 8; k++) {
+                        pMatrix.set.cell(j + k, i, parseInt(bitStr.charAt(k)));
+                    }
+                }
+            }
+            bMatrix = bass.matrix;
+            for (var i = 0; i < 5; i++) {
+                for (var j = 0; j < 64; j = j + 8) {
+                    index++;
+                    var bitStr = ("00000000" + arr[index].toString(2)).substr(-8);
+                    for (var k = 0; k < 8; k++) {
+                        bMatrix.set.cell(j + k, i, parseInt(bitStr.charAt(k)));
+                    }
+                }
+            }
+            mMatrix = melody.matrix;
+            for (var i = 0; i < 5; i++) {
+                for (var j = 0; j < 64; j = j + 8) {
+                    index++;
+                    var bitStr = ("00000000" + arr[index].toString(2)).substr(-8);
+                    for (var k = 0; k < 8; k++) {
+                        mMatrix.set.cell(j + k, i, parseInt(bitStr.charAt(k)));
+                    }
+                }
+            }
+        }
+
+        function createUrl() {
+            var b64 = base64js.fromByteArray(saveNotes());
+            var shareUrl = window.location.origin + window.location.pathname + "?" + escape(b64);
+            document.getElementById("shareUrl").href = shareUrl;
+        }
+
+        //init
+        var isLoaded = false;
+
         var notes = new Tone.Players({
             "p1": "./sound/adau-p1.ogg",
             "p2": "./sound/adau-p2.ogg",
@@ -57,16 +239,70 @@
             "m4": "./sound/adau-m4.ogg",
             "m5": "./sound/adau-m5.ogg",
         }, {
-            "volume": -10,
             "fadeOut": "64n",
-        }).toMaster();
+        })
 
         var pNames = ["p1", "p2", "p3"];
         var bNames = ["b1", "b2", "b3", "b4", "b5"];
         var mNames = ["m1", "m2", "m3", "m4", "m5"];
 
+        var pVol = new Tone.Volume(0);
+        var bVol = new Tone.Volume(0);
+        var mVol = new Tone.Volume(0);
 
-        var percussion = new Nexus.Sequencer('#percussion', {
+        for (i in pNames) {
+            notes.get(pNames[i]).connect(pVol);
+        }
+        for (i in bNames) {
+            notes.get(bNames[i]).connect(bVol);
+        }
+        for (i in mNames) {
+            notes.get(mNames[i]).connect(mVol);
+        }
+        pVol.toMaster();
+        bVol.toMaster();
+        mVol.toMaster();
+
+        var instOptions = new Nexus.Rack("#instOptions");
+
+        instOptions.percussionInst.defineOptions(["ADAU", "ALPHA"]);
+        instOptions.percussionInst.on('change', function (v) {
+            reloadInst(0, v);
+        })
+        instOptions.bassInst.defineOptions(["ADAU", "ALPHA"]);
+        instOptions.melodyInst.defineOptions(["ADAU", "ALPHA"]);
+
+        with (instOptions.percussionVol) {
+            max = 100,
+            min = 0,
+            value = 100,
+            step = 1
+        }
+        instOptions.percussionVol.on('change', function (v) {
+            pVol.volume.value = Tone.gainToDb(v / 100);
+        });
+
+        with (instOptions.bassVol) {
+            max = 100,
+            min = 0,
+            value = 100,
+            step = 1
+        }
+        instOptions.bassVol.on('change', function (v) {
+            bVol.volume.value = Tone.gainToDb(v / 100);
+        });
+
+        with (instOptions.melodyVol) {
+            max = 100,
+            min = 0,
+            value = 100,
+            step = 1
+        }
+        instOptions.melodyVol.on('change', function (v) {
+            mVol.volume.value = Tone.gainToDb(v / 100);
+        });
+
+        var percussion = new Nexus.Sequencer('#percussionNote', {
             'size': [1200, 60],
             'mode': 'toggle',
             'rows': 3,
@@ -76,9 +312,10 @@
         percussion.colorize("accent", "#757575");
         percussion.colorize("fill", "#e6e6e6");
         percussion.on('change', function (v) {
-            if (v.state) {
+            if (v.state && isLoaded) {
                 notes.get(pNames[v.row]).start();
             }
+            createUrl();
         });
         percussion.on('step', function (v) {
             for (i in v) {
@@ -88,7 +325,7 @@
             }
         });
 
-        var bass = new Nexus.Sequencer('#bass', {
+        var bass = new Nexus.Sequencer('#bassNote', {
             'size': [1200, 100],
             'mode': 'toggle',
             'rows': 5,
@@ -98,9 +335,10 @@
         bass.colorize("accent", "#66b3cf");
         bass.colorize("fill", "#ecf5f9");
         bass.on('change', function (v) {
-            if (v.state) {
+            if (v.state && isLoaded) {
                 notes.get(bNames[v.row]).start();
             }
+            createUrl();
         });
         bass.on('step', function (v) {
             for (i in v) {
@@ -110,7 +348,7 @@
             }
         });
 
-        var melody = new Nexus.Sequencer('#melody', {
+        var melody = new Nexus.Sequencer('#melodyNote', {
             'size': [1200, 100],
             'mode': 'toggle',
             'rows': 5,
@@ -120,9 +358,10 @@
         melody.colorize("accent", "#f88bff");
         melody.colorize("fill", "#fde6ff");
         melody.on('change', function (v) {
-            if (v.state) {
+            if (v.state && isLoaded) {
                 notes.get(mNames[v.row]).start();
             }
+            createUrl();
         });
         melody.on('step', function (v) {
             for (i in v) {
@@ -135,8 +374,8 @@
         var play = new Nexus.TextButton('#play', {
             'size': [150, 50],
             'state': false,
-            'text': 'Play',
-            'alternateText': 'Stop'
+            'text': '播放',
+            'alternateText': '暂停'
         });
 
         play.on('change', function (v) {
@@ -144,14 +383,20 @@
                 percussion.start();
                 bass.start();
                 melody.start();
-            } else{
+            } else {
                 percussion.stop();
                 bass.stop();
                 melody.stop();
             }
-            
-            console.log(v);
-        })
+        });
+
+        //read url
+        var paramStr = location.search.substring(1);
+        if (paramStr) {
+            var byteArr = base64js.toByteArray(unescape(paramStr));
+            loadNotes(byteArr);
+        }
+        isLoaded = true;
     </script>
 </body>
 
