@@ -10,18 +10,19 @@
 </head>
 
 <body>
+    <h4>曼达和弦琴谱面编辑器 | Mandachord Note Editor</h4>
     <table id="instOptions">
         <tr>
             <td>打击乐：</td>
             <td><div nexus-ui="select" id="percussionInst"></div></td>
             <td><div nexus-ui="slider" id="percussionVol"></div></td>
-            <td></td>
+            <td><a id="shareUrl" href="#" target="_blank" style="margin-left:10px">分享链接</a></td>
         </tr>
         <tr>
             <td>低音：</td>
             <td><div nexus-ui="select" id="bassInst"></div></td>
             <td><div nexus-ui="slider" id="bassVol"></div></td>
-            <td></td>
+            <td><span style="margin-left:10px">注意！链接包含了整个谱面信息，在每次音符修改后都会改变。请在每完成一个作品后自行保存链接文本。</span></td>
         </tr>
         <tr>
             <td>旋律：</td>
@@ -85,9 +86,9 @@
         <table>
             <tr>
                 <td><div id="play"></div></td>
-                <td><a id="shareUrl" href="#">分享链接</a></td>
+                <td></td>
             </tr>
-        </table>   
+        </table>
     </div>
     <script>
         function unescape(str) {
@@ -107,7 +108,7 @@
             switch (type) {
                 case 0:
                     for (i in pNames) {
-                        notes.get(pNames[i]).load("./sound/" + inst.value.toLowerCase() + "-" + pNames[i] +".ogg");
+                        notes.get(pNames[i]).load("./sound/" + inst.value.toLowerCase() + "-" + pNames[i] + ".ogg");
                     }
                     break;
                 case 1:
@@ -239,8 +240,8 @@
             "m4": "./sound/adau-m4.ogg",
             "m5": "./sound/adau-m5.ogg",
         }, {
-            "fadeOut": "64n",
-        })
+                "fadeOut": "64n",
+            })
 
         var pNames = ["p1", "p2", "p3"];
         var bNames = ["b1", "b2", "b3", "b4", "b5"];
@@ -268,38 +269,50 @@
         instOptions.percussionInst.defineOptions(["ADAU", "ALPHA"]);
         instOptions.percussionInst.on('change', function (v) {
             reloadInst(0, v);
+            createUrl();
         })
         instOptions.bassInst.defineOptions(["ADAU", "ALPHA"]);
+        instOptions.bassInst.on('change', function (v) {
+            reloadInst(1, v);
+            createUrl();
+        })
         instOptions.melodyInst.defineOptions(["ADAU", "ALPHA"]);
+        instOptions.melodyInst.on('change', function (v) {
+            reloadInst(2, v);
+            createUrl();
+        })
 
         with (instOptions.percussionVol) {
             max = 100,
-            min = 0,
-            value = 100,
-            step = 1
+                min = 0,
+                value = 100,
+                step = 1
         }
         instOptions.percussionVol.on('change', function (v) {
             pVol.volume.value = Tone.gainToDb(v / 100);
+            createUrl();
         });
 
         with (instOptions.bassVol) {
             max = 100,
-            min = 0,
-            value = 100,
-            step = 1
+                min = 0,
+                value = 100,
+                step = 1
         }
         instOptions.bassVol.on('change', function (v) {
             bVol.volume.value = Tone.gainToDb(v / 100);
+            createUrl();
         });
 
         with (instOptions.melodyVol) {
             max = 100,
-            min = 0,
-            value = 100,
-            step = 1
+                min = 0,
+                value = 100,
+                step = 1
         }
         instOptions.melodyVol.on('change', function (v) {
             mVol.volume.value = Tone.gainToDb(v / 100);
+            createUrl();
         });
 
         var percussion = new Nexus.Sequencer('#percussionNote', {
